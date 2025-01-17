@@ -2,53 +2,36 @@
   <el-row class="login-container" type="flex" justify="center" align="middle">
     <!-- 左侧图片部分 -->
     <el-col :span="12" :xs="24" :sm="24" :md="12" class="login-image">
-      <img src="@/assets/common/work.png" alt="登录图片" class="image"/>
+      <img src="@/assets/common/work.png" alt="登录图片" class="image" />
     </el-col>
 
     <!-- 右侧登录表单部分 -->
     <el-col :span="8" :xs="24" :sm="24" :md="8" class="login-form-container">
       <el-card class="login-card">
         <h2 class="form-title">登录</h2>
-        <el-form 
-          :model="loginForm" 
-          :rules="rules" 
-          ref="loginForm" 
-          label-position="left" 
-          label-width="0"
-        >
+        <el-form :model="loginForm" :rules="rules" ref="loginForm" label-position="left" label-width="0">
           <el-form-item prop="username">
-            <el-input 
-              v-model="loginForm.username" 
-              placeholder="用户名" 
-              prefix-icon="el-icon-user"
-            ></el-input>
+            <el-input v-model="loginForm.username" placeholder="用户名" prefix-icon="el-icon-user"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input
-              v-model="loginForm.password"
-              type="password"
-              placeholder="密码"
-              prefix-icon="el-icon-lock"
-              @keyup.enter.native="onSubmit"
-            ></el-input>
+            <el-input v-model="loginForm.password" type="password" placeholder="密码" prefix-icon="el-icon-lock"
+              @keyup.enter.native="onSubmit"></el-input>
           </el-form-item>
-          
+
           <!-- 使用协议复选框 -->
           <el-form-item prop="agreement">
             <el-checkbox v-model="loginForm.agreement">
               我已阅读并同意<a href="/user-agreement" target="_blank">《用户平台使用协议》</a>
             </el-checkbox>
           </el-form-item>
-          
+
           <el-form-item>
-            <el-button 
-              type="primary" 
-              class="login-button" 
-              @click="onSubmit" 
-              :loading="loading" 
-              :disabled="!isFormValid"
-            >
+            <el-button type="primary" class="login-button" @click="onSubmit" :loading="loading"
+              :disabled="!isFormValid">
               登录
+            </el-button>
+            <el-button @click="testAjax">
+              测试接口
             </el-button>
           </el-form-item>
         </el-form>
@@ -103,7 +86,7 @@ export default {
           setTimeout(() => {
             this.loading = false;
             // 这里可以添加实际的登录逻辑，例如调用API
-            this.$store.dispatch('user/login',this.loginForm)
+            this.$store.dispatch('user/login', this.loginForm)
             this.$message.success('登录成功！');
             // 跳转到主页或其他页面
             this.$router.push({ name: 'Home' });
@@ -113,7 +96,18 @@ export default {
           return false;
         }
       });
-    }
+    },
+    // testAjax() {
+    //   const data = {
+    //     mobile: '13800000002',
+    //     password: 'hm#qd@23!'
+    //   };
+    //   this.$ajax.post('/api/sys/login', data).then(res => {
+    //     console.log(res);
+    //   }).catch(error => {
+    //     console.error('请求错误:', error);
+    //   });
+    // }
   }
 };
 </script>
@@ -170,7 +164,8 @@ export default {
     flex-direction: column;
   }
 
-  .login-image, .login-form-container {
+  .login-image,
+  .login-form-container {
     padding: 10px;
   }
 

@@ -7,21 +7,21 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
+ * 注意：子菜单仅在路由的 children.length >= 1 时显示
+ * 详情见：https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * hidden: true                   如果设置为 true，项将不会在侧边栏显示（默认为 false）
+ * alwaysShow: true               如果设置为 true，始终显示根菜单
+ *                                如果没有设置 alwaysShow，当项有多个子路由时，
+ *                                它将变为嵌套模式，否则根菜单将不显示
+ * redirect: noRedirect           如果设置为 noRedirect，面包屑将不会重定向
+ * name:'router-name'             name 用于 <keep-alive>（必须设置！！！）
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    roles: ['admin','editor']    控制页面角色（可以设置多个角色）
+    title: 'title'               在侧边栏和面包屑中显示的名称（建议设置）
+    icon: 'svg-name'/'el-icon-x' 在侧边栏中显示的图标
+    breadcrumb: false            如果设置为 false，该项将不会显示在面包屑中（默认为 true）
+    activeMenu: '/example/list'  如果设置了路径，侧边栏将高亮显示你设置的路径
   }
  */
 
