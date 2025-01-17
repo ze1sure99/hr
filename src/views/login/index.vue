@@ -10,8 +10,8 @@
       <el-card class="login-card">
         <h2 class="form-title">登录</h2>
         <el-form :model="loginForm" :rules="rules" ref="loginForm" label-position="left" label-width="0">
-          <el-form-item prop="username">
-            <el-input v-model="loginForm.username" placeholder="用户名" prefix-icon="el-icon-user"></el-input>
+          <el-form-item prop="mobile">
+            <el-input v-model="loginForm.mobile" placeholder="手机号" prefix-icon="el-icon-phone"></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="loginForm.password" type="password" placeholder="密码" prefix-icon="el-icon-lock"
@@ -30,9 +30,6 @@
               :disabled="!isFormValid">
               登录
             </el-button>
-            <el-button @click="testAjax">
-              测试接口
-            </el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -46,13 +43,13 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '',
+        mobile: '',
         password: '',
         agreement: false // 协议字段
       },
       rules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -69,7 +66,7 @@ export default {
     isFormValid() {
       // 检查用户名和密码是否非空，并且协议已勾选
       return (
-        this.loginForm.username.trim() !== '' &&
+        this.loginForm.mobile.trim() !== '' &&
         this.loginForm.password.trim() !== '' &&
         this.loginForm.password.length >= 6 &&
         this.loginForm.password.length <= 16 &&
@@ -78,37 +75,47 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
-      this.$refs.loginForm.validate((valid) => {
+    async onSubmit() {
+      this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
           this.loading = true;
-          // 模拟登录请求
-          setTimeout(() => {
-            this.loading = false;
-            // 这里可以添加实际的登录逻辑，例如调用API
-            this.$store.dispatch('user/login', this.loginForm)
-            this.$message.success('登录成功！');
-            // 跳转到主页或其他页面
-            this.$router.push({ name: 'Home' });
-          }, 2000);
+          try {
+            // 调用 Vuex 登录方法
+            await this.$store.dispatch('user/login',this.loginForm);
+            // 登录成功后跳转
+              this.$message.success('登录成功！');
+              this.$router.push({
+                path: '/'
+              }); 
+          } catch (error) {
+            // 登录失败
+            console.error('登录失败:', error);
+            this.$message.error('登录失败，请检查账号和密码');
+          } finally {
+            this.loading = false;  // 请求结束后关闭loading
+          }
         } else {
           this.$message.error('请完善表单信息');
-          return false;
         }
       });
-    },
-    // testAjax() {
-    //   const data = {
-    //     mobile: '13800000002',
-    //     password: 'hm#qd@23!'
-    //   };
-    //   this.$ajax.post('/api/sys/login', data).then(res => {
-    //     console.log(res);
-    //   }).catch(error => {
-    //     console.error('请求错误:', error);
-    //   });
-    // }
-  }
+    }
+  },
+  //   testAxios() {
+  //     const data = {
+  //       mobile: '13800000002',
+  //       password: 'hm#qd@23!'
+  //     };
+  //     // 使用 axios 实例发送 POST 请求
+  //     service.post('/api/sys/login', data)
+  //       .then(res => {
+  //         console.log(res); // 请求成功，输出响应结果
+  //       })
+  //       .catch(error => {
+  //         console.error('请求错误:', error); // 请求失败，输出错误
+  //       });
+  //    }
+  // }
+
 };
 </script>
 

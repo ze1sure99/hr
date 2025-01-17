@@ -1,85 +1,56 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
 
-// create an axios instance
+// 创建 axios 实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
+  timeout: 10000 // 请求超时时间
 })
 
-// request interceptor
+// 请求拦截器
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
-
-    if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+    // 使用 store 获取 token
+    const token = store.getters.token // 从 Vuex 中获取 token
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}` // 在请求头中添加 Authorization
     }
     return config
   },
   error => {
-    // do something with request error
-    console.log(error) // for debug
+    // 请求错误处理
+    console.error('请求错误:', error)
     return Promise.reject(error)
   }
 )
 
-// response interceptor
+// 响应拦截器
 service.interceptors.response.use(
-  /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
-  */
-
-  /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
-  response => {
-    const res = response.data
-
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
-
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        })
-      }
-      return Promise.reject(new Error(res.message || 'Error'))
-    } else {
-      return res
+    response => {
+        // 如果服务器返回的数据符合预期，直接返回
+        return response.data;
+    },
+    error => {
+        // 响应错误处理
+        console.error('响应错误:', error);
+        if (error.response) {
+            // 根据返回的错误代码做处理
+            if (error.response.status === 401) {
+                // 处理未授权的情况，可能是 token 失效，跳转到登录页面
+                console.log('Token 失效，请重新登录');
+                // todo 例如清除 token 并跳转到登录页面
+                // store.dispatch('user/logout'); // 调用 Vuex 中的 logout action 清除 token
+                // window.location.href = '/login';
+            } else {
+                // 其他类型的错误可以在这里处理
+                console.error('其他错误:', error.response.status);
+            }
+        } else {
+            // 如果没有响应，表示网络问题或其他错误
+            console.error('网络错误:', error.message);
+        }
+        return Promise.reject(error); // 返回失败的 Promise
     }
-  },
-  error => {
-    console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
-    return Promise.reject(error)
-  }
-)
+);
 
 export default service

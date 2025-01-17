@@ -1,4 +1,5 @@
 import { getToken, removeToken, setToken } from '@/utils/auth'
+import {login}  from '@/api/user'
 // state中定义数据
 const state = {
   token: getToken() // 从缓存中读取初始值
@@ -24,13 +25,18 @@ const mutations = {
 // actions中定义页面调用方法
 const actions = {
   // 第一个参数是context上下文，第二个参数是传入参数
-  login(conext, data) {
+  async login(conext, data) {
     //  console.log(conext);
-    console.log(data)
-    // todo: 调用登陆接口
-
+    // console.log(data)
+    // console.log(data.mobile)
+    //   调用登陆接口
+    const res =  await login({
+      mobile: data.mobile, 
+      password: data.password
+    })
+    const token = res
     // 登陆成功后，会返回一个token 123456(点击登录，设置token为123456)
-    conext.commit('setToken', '123456')
+    conext.commit('setToken', token)
   }
 }
 

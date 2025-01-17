@@ -37,9 +37,12 @@ module.exports = {
       errors: true
     },
     proxy: {
-      // path: 目标服务器
-      '/api': {
-        target: 'https://heimahr.itheima.net/'
+      '/dev-api': {
+        target: 'https://heimahr.itheima.net',  // 目标 API 地址
+        changeOrigin: true,                     // 更改请求的源
+        pathRewrite: {
+          '^/dev-api': ''  // 重写请求路径
+        }
       }
     }
     // before: require('./mock/mock-server.js') 基础模版做的模拟数据 拦截请求

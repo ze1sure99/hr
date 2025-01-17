@@ -11,7 +11,6 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-import axios from 'axios'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -36,7 +35,7 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
-Vue.prototype.$ajax = axios
+// Vue.prototype.$ajax = axios
 
 new Vue({
   el: '#app',
