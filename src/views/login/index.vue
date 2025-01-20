@@ -62,6 +62,14 @@ export default {
       loading: false
     };
   },
+  created() {
+    // 判断是否是开发环境
+    if (process.env.NODE_ENV === 'development') {
+      // 只有在开发环境下，才设置默认值
+      this.loginForm.mobile = '13800000002';
+      this.loginForm.password = 'hm#qd@23!';
+    }
+  },
   computed: {
     isFormValid() {
       // 检查用户名和密码是否非空，并且协议已勾选
