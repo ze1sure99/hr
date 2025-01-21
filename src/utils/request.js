@@ -1,6 +1,5 @@
 import axios from 'axios'
 import store from '@/store'
-import router  from '@/router'
 import { Message } from 'element-ui'
 
 // 创建 axios 实例
@@ -28,39 +27,39 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(
-    response => {
-        // 如果服务器返回的数据符合预期，直接返回
-        return response.data;
-    },
-   async error => {
-        // 响应错误处理
-        console.error('响应错误:', error);
-        if (error.response) {
-            // 根据返回的错误代码做处理
-            if (error.response.status === 401) {
-                // debugger;
-                Message({
-                    message: 'Token 失效，请重新登录',
-                    type: 'error'
-                }); 
-                // 处理未授权的情况，可能是 token 失效，跳转到登录页面
-                console.log('Token 失效，请重新登录');
-                //清除 token 并跳转到登录页面
-                await store.dispatch('user/logout'); // 调用 Vuex 中的 logout action 清除 token
-                // 跳转到登录页面
-                this.$router.push({
-                  path:'/login'
-                });
-            } else {
-                // 其他类型的错误可以在这里处理
-                console.error('其他错误:', error.response.status);
-            }
-        } else {
-            // 如果没有响应，表示网络问题或其他错误
-            console.error('网络错误:', error.message);
-        }
-        return Promise.reject(error); // 返回失败的 Promise
+  response => {
+    // 如果服务器返回的数据符合预期，直接返回
+    return response.data
+  },
+  async error => {
+    // 响应错误处理
+    console.error('响应错误:', error)
+    if (error.response) {
+      // 根据返回的错误代码做处理
+      if (error.response.status === 401) {
+        // debugger;
+        Message({
+          message: 'Token 失效，请重新登录',
+          type: 'error'
+        })
+        // 处理未授权的情况，可能是 token 失效，跳转到登录页面
+        console.log('Token 失效，请重新登录')
+        // 清除 token 并跳转到登录页面
+        await store.dispatch('user/logout') // 调用 Vuex 中的 logout action 清除 token
+        // 跳转到登录页面
+        this.$router.push({
+          path: '/login'
+        })
+      } else {
+        // 其他类型的错误可以在这里处理
+        console.error('其他错误:', error.response.status)
+      }
+    } else {
+      // 如果没有响应，表示网络问题或其他错误
+      console.error('网络错误:', error.message)
     }
-);
+    return Promise.reject(error) // 返回失败的 Promise
+  }
+)
 
 export default service

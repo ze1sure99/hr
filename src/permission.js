@@ -1,6 +1,5 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
 import NProgress from 'nprogress' // 进度条
 import 'nprogress/nprogress.css' // 进度条样式
 import { getToken } from '@/utils/auth' // 从 cookie 获取 token
@@ -11,7 +10,7 @@ NProgress.configure({ showSpinner: false }) // 配置 NProgress（不显示旋�
 const whiteList = ['/login'] // 不需要重定向的白名单
 
 // 路由前置守卫
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   // 开始进度条
   NProgress.start()
 

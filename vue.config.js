@@ -38,10 +38,10 @@ module.exports = {
     },
     proxy: {
       '/dev-api': {
-        target: 'https://heimahr.itheima.net',  // 目标 API 地址
-        changeOrigin: true,                     // 更改请求的源
+        target: 'https://heimahr.itheima.net', // 目标 API 地址
+        changeOrigin: true, // 更改请求的源
         pathRewrite: {
-          '^/dev-api': ''  // 重写请求路径
+          '^/dev-api': '' // 重写请求路径
         }
       }
     }

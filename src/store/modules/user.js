@@ -1,12 +1,12 @@
 import { getToken, removeToken, setToken } from '@/utils/auth'
-import {login}  from '@/api/user'
+import { login } from '@/api/user'
 import { getUserProfile } from '@/api/user'
 // state中定义数据
 const state = {
-  token: getToken() ,// 从缓存中读取初始值
-  userProfile:{
+  token: getToken(), // 从缓存中读取初始值
+  userProfile: {
 
-  } 
+  }
 }
 
 const mutations = {
@@ -25,7 +25,7 @@ const mutations = {
     removeToken()
   },
 
-  setUserProfile(state,userProfile){
+  setUserProfile(state, userProfile) {
     state.userProfile = userProfile
   }
 
@@ -39,8 +39,8 @@ const actions = {
     // console.log(data)
     // console.log(data.mobile)
     //   调用登陆接口
-    const res =  await login({
-      mobile: data.mobile, 
+    const res = await login({
+      mobile: data.mobile,
       password: data.password
     })
     const token = res
@@ -49,17 +49,16 @@ const actions = {
   },
   // 获取用户的基本资料
   async getUserInfo(conext) {
-   const res =  await getUserProfile();
-   conext.commit('setUserProfile',res);
+    const res = await getUserProfile()
+    conext.commit('setUserProfile', res)
   //  console.log(conext)
   },
   async logout(conext) {
     // 1.删除token
     conext.commit('removeToken')
     // 2.删除用户信息
-    conext.commit('setUserProfile',{})
+    conext.commit('setUserProfile', {})
   }
-
 
 }
 
