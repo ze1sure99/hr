@@ -7,7 +7,8 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="staffPhoto+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <span>{{ username }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -44,7 +45,9 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'staffPhoto',
+      'username'
     ])
   },
   methods: {
@@ -114,17 +117,34 @@ export default {
     .avatar-container {
       margin-right: 30px;
 
+      /* Center the avatar and username */
+      display: flex;
+      align-items: center;  /* Vertically center the items */
+      justify-content: center;  /* Horizontally center the items */
+
       .avatar-wrapper {
-        margin-top: 5px;
+        display: flex;
+        align-items: center;  /* Vertically center the avatar and username */
+        justify-content: center;  /* Horizontally center the avatar and username */
         position: relative;
 
+        /* Style for the avatar */
         .user-avatar {
           cursor: pointer;
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 50%;  /* Make the avatar circular */
+          margin-right: 8px;  /* Space between avatar and username */
         }
 
+        /* Style for the username */
+        .user-name {
+          font-size: 14px;
+          color: #333;
+          line-height: 40px;  /* Vertically center the username */
+        }
+
+        /* Dropdown icon */
         .el-icon-caret-bottom {
           cursor: pointer;
           position: absolute;

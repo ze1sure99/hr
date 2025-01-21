@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">name: {{ username}}</div>
     <!-- 使用svg-icon 组件 -->
      <!-- 设置iconClass属性=“文件名（没有后缀）” -->
      <svg-icon icon-class="dashboard" ></svg-icon>
@@ -16,8 +16,16 @@ export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
-      'name'
+      'username'
     ])
+  },
+  data() {
+    return {
+      // name: 'admin'
+    }
+  },
+  created() {
+  
   }
 }
 </script>

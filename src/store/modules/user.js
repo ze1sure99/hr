@@ -1,8 +1,12 @@
 import { getToken, removeToken, setToken } from '@/utils/auth'
 import {login}  from '@/api/user'
+import { getUserProfile } from '@/api/user'
 // state中定义数据
 const state = {
-  token: getToken() // 从缓存中读取初始值
+  token: getToken() ,// 从缓存中读取初始值
+  userProfile:{
+
+  } 
 }
 
 const mutations = {
@@ -19,7 +23,12 @@ const mutations = {
     state.token = null
     // 2.删除缓存中的token
     removeToken()
+  },
+
+  setUserProfile(state,userProfile){
+    state.userProfile = userProfile
   }
+
 }
 
 // actions中定义页面调用方法
@@ -37,6 +46,12 @@ const actions = {
     const token = res
     // 登陆成功后，会返回一个token 123456(点击登录，设置token为123456)
     conext.commit('setToken', token)
+  },
+  // 获取用户的基本资料
+  async getUserInfo(conext) {
+   const res =  await getUserProfile();
+   conext.commit('setUserProfile',res);
+  //  console.log(conext)
   }
 }
 

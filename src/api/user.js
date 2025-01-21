@@ -19,3 +19,24 @@ export function login(data) {
       throw error; // 抛出错误
     });
 }
+
+
+export function getUserProfile() {
+  return request({
+    url: '/api/sys/profile',  // API 路径
+    method: 'get',            // 请求方式为 GET
+  })
+    .then(response => {
+      if (response && response.success === true) {
+        return response.data;  // 返回用户资料数据
+      } else {
+        throw new Error(response.message || '获取用户资料失败');
+      }
+    })
+    .catch(error => {
+      console.error('获取用户资料失败:', error);
+      throw error;  // 抛出错误
+    });
+}
+
+
