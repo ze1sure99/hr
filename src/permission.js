@@ -39,8 +39,7 @@ router.beforeEach(async (to, from, next) => {
           next() // 获取成功，继续跳转
         } catch (error) {
           // 获取用户信息失败，移除 token，跳转到登录页重新登录
-          await store.dispatch('user/resetToken') // 重置 token
-          Message.error(error || '发生错误') // 显示错误信息
+          await store.dispatch('user/logout') // 重置 token
           next(`/login?redirect=${to.path}`) // 跳转到登录页并携带重定向路径
           NProgress.done() // 完成进度条
         }

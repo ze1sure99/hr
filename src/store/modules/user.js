@@ -52,7 +52,15 @@ const actions = {
    const res =  await getUserProfile();
    conext.commit('setUserProfile',res);
   //  console.log(conext)
+  },
+  async logout(conext) {
+    // 1.删除token
+    conext.commit('removeToken')
+    // 2.删除用户信息
+    conext.commit('setUserProfile',{})
   }
+
+
 }
 
 export default {
