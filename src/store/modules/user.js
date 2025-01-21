@@ -1,69 +1,87 @@
 import { getToken, removeToken, setToken } from '@/utils/auth'
-import { login } from '@/api/user'
-import { getUserProfile } from '@/api/user'
+import { login, getUserProfile, updatePassword } from '@/api/user'
+
 // state中定义数据
 const state = {
   token: getToken(), // 从缓存中读取初始值
-  userProfile: {
-
-  }
+  userProfile: {}
 }
 
 const mutations = {
-  // mutations中的方法，第一个参数是state，第二个参数是传入的参数（payload）
-  // setToken两个参数 state是当前模块的state token是传入的token
   setToken(state, token) {
-    // 存到vuex中
     state.token = token
-    // 同步到缓存
     setToken(token)
   },
   removeToken(state) {
-    // 1.删除vuex中的token
     state.token = null
-    // 2.删除缓存中的token
     removeToken()
   },
-
   setUserProfile(state, userProfile) {
     state.userProfile = userProfile
   }
-
 }
 
 // actions中定义页面调用方法
 const actions = {
-  // 第一个参数是context上下文，第二个参数是传入参数
+  // 登录
   async login(conext, data) {
-    //  console.log(conext);
-    // console.log(data)
-    // console.log(data.mobile)
-    //   调用登陆接口
     const res = await login({
       mobile: data.mobile,
       password: data.password
     })
     const token = res
-    // 登陆成功后，会返回一个token 123456(点击登录，设置token为123456)
     conext.commit('setToken', token)
   },
+
   // 获取用户的基本资料
   async getUserInfo(conext) {
-    const res = await getUserProfile()
-    conext.commit('setUserProfile', res)
-  //  console.log(conext)
+    try {
+      const res = await getUserProfile()
+      if (res && res.username) {
+        conext.commit('setUserProfile', res)
+      } else {
+        conext.commit('setUserProfile', {})
+      }
+    } catch (error) {
+      console.error('获取用户信息失败', error)
+      conext.commit('setUserProfile', {}) // 出现错误时确保 userProfile 被清空
+    }
   },
-  async logout(conext) {
-    // 1.删除token
-    conext.commit('removeToken')
-    // 2.删除用户信息
-    conext.commit('setUserProfile', {})
-  }
 
+  // 登出
+  async logout(conext) {
+    conext.commit('removeToken')
+    conext.commit('setUserProfile', {})
+  },
+
+  // 修改用户密码
+  async updatePassword(conext, passwordData) {
+    console.log(passwordData.currentPassword,passwordData.newPassword)
+    const data = {
+      oldPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword
+    }
+    try {
+      // 调用 updatePassword API 来修改密码
+      const res = await updatePassword(data)
+      console.log(res)
+      if (res && res.success) {
+        // 如果修改密码成功，返回成功消息
+        return '密码修改成功'
+      } else {
+        // 如果返回的结果不成功，抛出错误
+        throw new Error(res.message || '密码修改失败')
+      }
+    } catch (error) {
+      // 错误处理
+      console.error('修改密码失败', error)
+      throw new Error(error.message || '密码修改失败')
+    }
+  }
 }
 
 export default {
-  namespaced: true, // 开启命名空间,dispatch调用需要这样调用 dispatch('user/login')
+  namespaced: true,
   state,
   mutations,
   actions

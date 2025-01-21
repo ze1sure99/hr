@@ -38,3 +38,13 @@ export function getUserProfile() {
     })
 }
 
+/**
+ * 修改用户密码
+ */
+export function updatePassword(data) {
+  return request({
+    url: '/api/sys/user/updatePass',
+    method: 'put',
+    data: data
+  })
+}
