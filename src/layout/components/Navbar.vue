@@ -7,9 +7,12 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
+          <!-- 头像 -->
           <img :src="staffPhoto+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <span>{{ username }}</span>
-          <i class="el-icon-caret-bottom" />
+          <!-- 用户名称 -->
+          <span class="user-name">{{ username }}</span>
+          <!-- 图标 -->
+          <i class="el-icon-setting" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
@@ -115,42 +118,38 @@ export default {
     }
 
     .avatar-container {
-      margin-right: 30px;
+      margin-right: 20px;  /* 调整距离右边的间距 */
 
-      /* Center the avatar and username */
+      /* 使用 flex 布局对齐头像和用户名 */
       display: flex;
-      align-items: center;  /* Vertically center the items */
-      justify-content: center;  /* Horizontally center the items */
+      align-items: center;  /* 垂直居中头像和用户名 */
+      justify-content: flex-start;  /* 左对齐头像和用户名 */
 
       .avatar-wrapper {
         display: flex;
-        align-items: center;  /* Vertically center the avatar and username */
-        justify-content: center;  /* Horizontally center the avatar and username */
+        align-items: center;  /* 垂直居中头像和用户名 */
         position: relative;
 
-        /* Style for the avatar */
+        /* 设置头像 */
         .user-avatar {
           cursor: pointer;
-          width: 40px;
+          width: 40px;  /* 增大头像尺寸 */
           height: 40px;
-          border-radius: 50%;  /* Make the avatar circular */
-          margin-right: 8px;  /* Space between avatar and username */
+          border-radius: 50%;  /* 使头像为圆形 */
+          margin-right: 10px;  /* 头像和用户名之间的间距 */
         }
 
-        /* Style for the username */
+        /* 设置用户名 */
         .user-name {
-          font-size: 14px;
+          font-size: 16px;  /* 增大用户名的字体 */
           color: #333;
-          line-height: 40px;  /* Vertically center the username */
         }
 
-        /* Dropdown icon */
-        .el-icon-caret-bottom {
+        /* 齿轮图标定位 */
+        .el-icon-setting {
           cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
+          font-size: 20px;  /* 增大齿轮图标 */
+          margin-left: 15px;  /* 增加齿轮图标和用户名之间的间距 */
         }
       }
     }
