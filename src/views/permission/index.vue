@@ -25,13 +25,21 @@
 
 <script>
 // 引入权限列表函数
-import { getPermissionList } from '@/api/permission';
+import { getPermissonList } from '../../api/permisson';
 export default {
   name: 'Permission',
   created() {
-    // 获取权限列表
-    this.getPermissionList();
-  },
+  // 获取权限列表
+  getPermissonList() 
+    .then(response => {
+      // 在这里处理获取到的数据
+      console.log(response);
+    })
+    .catch(error => {
+      // 在这里处理错误
+      console.error(error);
+    });
+},
   data() {
     return {
       tableData: [
@@ -107,12 +115,6 @@ export default {
     deleteItem(row) {
       // 删除操作
       console.log('删除:', row);
-    },
-    async getPermissionList(){
-            await getPermissionList().then(res => {
-            console.log(res);
-            // this.tableData = res.data;
-    });
     }
   }
 }
