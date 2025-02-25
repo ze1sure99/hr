@@ -10,10 +10,10 @@
         <template #default="{ node, data }">
           <div class="tree-node">
             <!-- 左侧：部门名称 -->
-            <span class="node-label">{{ data.label }}</span>
+            <span class="node-label">{{ data.name }}</span>
             <div class="node-actions">
               <!-- 右侧：管理员和操作 -->
-              <span class="node-admin">{{ data.admin }}</span>
+              <span class="node-admin">{{ data.managerName }}</span>
               <el-dropdown @command="handleAction">
                 <span class="operation-text">操作<i class="el-icon-arrow-down"></i></span>
                 <el-dropdown-menu slot="dropdown">
@@ -31,64 +31,89 @@
 </template>
 
 <script>
+import { getDepartmentList } from '@/api/department';
+
 export default {
   name: 'Department',
+  created() {
+    this.loadDepartmentData();
+  },
   data() {
     return {
-      // 数据格式
-      treeData: [
-        {
-          label: '传智教育',
-          admin: '管理员',
-          children: [
-            {
-              label: '总裁办',
-              admin: '张三',
-            },
-            {
-              label: '行政部',
-              admin: '李四',
-            },
-            {
-              label: '人事部',
-              admin: '王五',
-            },
-          ],
-        },
-      ],
+      treeData: [],
       defaultProps: {
         children: 'children',
-        label: 'label',
-      },
+        label: 'name'  // 修改为使用name字段
+      }
     };
   },
   methods: {
+    async loadDepartmentData() {
+      try {
+        const res = await getDepartmentList();
+        // 转换API数据为树形结构
+        this.treeData = this.buildTree(res.data);
+      } catch (error) {
+        console.error('数据加载失败:', error);
+        this.$message.error('部门数据加载失败');
+      }
+    },
+
+    // 构建树形结构的方法
+    buildTree(items) {
+      const itemMap = new Map();
+      const tree = [];
+
+      // 创建映射表
+      items.forEach(item => {
+        itemMap.set(item.id, { 
+          ...item,
+          children: []
+        });
+      });
+
+      // 构建树结构
+      itemMap.forEach(item => {
+        if (item.pid === 0) {
+          tree.push(item);
+        } else {
+          const parent = itemMap.get(item.pid);
+          if (parent) {
+            parent.children.push(item);
+          }
+        }
+      });
+
+      return tree;
+    },
+
     handleAction(command) {
       this.$message(`操作：${command}`);
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
+/* 保持原有样式不变 */
 .container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  height: 100vh; /* 使容器充满视口 */
+  height: 100vh;
 }
 
 .department-container {
-  width: calc(100% - 10px); /* 确保左右有5px的间隙 */
-  margin-top: 5px; /* 顶部间距 */
+  width: calc(100% - 10px);
+  margin-top: 5px;
 }
 
 .tree-background {
-  width: 100%; /* 背景框宽度撑满容器 */
-  background-color: #ffffff; /* 白色背景 */
-  padding: 5px 20px; /* 上下5px，左右20px的内边距 */
+  width: 100%;
+  background-color: #ffffff;
+  padding: 5px 20px;
   border-radius: 8px;
-  box-sizing: border-box; /* 确保内边距不影响宽度 */
+  box-sizing: border-box;
 }
 
 .tree-node {
@@ -103,13 +128,13 @@ export default {
   font-size: 14px;
   font-weight: bold;
   color: #409eff;
-  flex-grow: 1; /* 左侧部分占据剩余空间 */
+  flex-grow: 1;
 }
 
 .node-actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* 右对齐操作 */
+  justify-content: flex-end;
 }
 
 .node-admin {
