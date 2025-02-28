@@ -127,7 +127,6 @@ export default {
 .node-label {
   font-size: 14px;
   font-weight: bold;
-  color: #409eff;
   flex-grow: 1;
 }
 
